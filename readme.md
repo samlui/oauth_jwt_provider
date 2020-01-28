@@ -7,7 +7,7 @@ The original Mulesoft OAuth2 Provider module allows a Mule runtime engine (Mule)
 
 This project provides examples to generate and validate a token and register a client.
 
-<img src="https://raw.githubusercontent.com/samlui/oauth_jwt_provider/master/src/main/resources/img/interaction.png" width="400"/>
+<img src="https://raw.githubusercontent.com/samlui/oauth_jwt_provider/master/oauth-jwt-provider/src/main/resources/img/interaction.png" width="400"/>
 
 # Prerequisites
 
@@ -23,14 +23,14 @@ This project provides examples to generate and validate a token and register a c
 
 _Authentication flow_
 
-<img src="https://raw.githubusercontent.com/samlui/oauth_jwt_provider/master/src/main/resources/img/authentication.png" width="400"/>
+<img src="https://raw.githubusercontent.com/samlui/oauth_jwt_provider/master/oauth-jwt-provider/src/main/resources/img/authentication.png" width="400"/>
 
 
 
 
 _Authentication Request_
 
-<img src="https://raw.githubusercontent.com/samlui/oauth_jwt_provider/master/src/main/resources/img/auth_request.png" width="400"/>
+<img src="https://raw.githubusercontent.com/samlui/oauth_jwt_provider/master/oauth-jwt-provider/src/main/resources/img/auth_request.png" width="400"/>
 
 ```
 curl --location --request POST 'http://localhost:8081/access-token?grant_type=password&client_id=<client_id>&client_secret=<client_secret>&scope=READ&password=user1&username=user1' \
@@ -53,7 +53,7 @@ output application/java
 
 _Authentication Response_
 
-<img src="https://raw.githubusercontent.com/samlui/oauth_jwt_provider/master/src/main/resources/img/auth_result.png" width="400"/>
+<img src="https://raw.githubusercontent.com/samlui/oauth_jwt_provider/master/oauth-jwt-provider/src/main/resources/img/auth_result.png" width="400"/>
 
 
 *Output from Custom Authentication Flow*
@@ -76,4 +76,4 @@ output application/java
 
 _JWT Result_
 
-<img src="https://raw.githubusercontent.com/samlui/oauth_jwt_provider/master/src/main/resources/img/jwt.png" width="400"/>
+<img src="https://raw.githubusercontent.com/samlui/oauth_jwt_provider/master/oauth-jwt-provider/src/main/resources/img/jwt.png" width="400"/>
