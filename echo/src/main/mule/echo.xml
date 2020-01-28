@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="c90c39fa-9050-4c61-b3d9-0251511b954e" >
+		<http:listener-connection host="0.0.0.0" port="9191" />
+	</http:listener-config>
+	<api-gateway:autodiscovery apiId="15946974" doc:name="API Autodiscovery" doc:id="354a5aa3-da40-4d10-902d-8935b8fe8bcb" flowRef="echoFlow" />
+	<flow name="echoFlow" doc:id="16aa2946-5094-4d79-82a3-02cab8800558" >
+		<http:listener doc:name="Listener" doc:id="3931bc2e-0ad2-4a35-920b-209272fe8f13" config-ref="HTTP_Listener_config" path="/echo"/>
+		<ee:transform doc:name="Transform Message" doc:id="fcc12c19-e93a-47ff-9d3a-0f987612825d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	echo: attributes.queryParams.msg
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="b8614f2b-67af-4bfc-aa81-82d64977708c" message="echo :  #[payload]"/>
+	</flow>
+</mule>

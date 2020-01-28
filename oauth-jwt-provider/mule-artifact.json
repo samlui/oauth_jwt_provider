@@ -1,0 +1,12 @@
+{
+  "minMuleVersion": "4.2.1",
+  "classLoaderModelLoaderDescriptor": {
+    "id": "mule",
+    "attributes": {
+        "exportedPackages": [
+            "com.mule.custom.security.provider",
+            "com.mule.custom.security.token.strategy"
+        		]
+    		}
+	}
+}

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:oauth2-provider="http://www.mulesoft.org/schema/mule/oauth2-provider" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/oauth2-provider http://www.mulesoft.org/schema/mule/oauth2-provider/current/mule-oauth2-provider.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="a2a94aff-fbd5-4426-9767-b1d9735a8634" >
+		<http:listener-connection host="${http.host}" port="${http.public.port}" />
+	</http:listener-config>
+	
+	<flow name="oauth-providerFlow" doc:id="d6e8f3ce-340a-440c-9961-5344eb91f32a" >
+		<http:listener doc:name="Listener" doc:id="b7c0e7c5-a85a-4d36-a6bd-ef2d29431316" config-ref="HTTP_Listener_config" path="${uri.path}"/>
+		<logger level="INFO" doc:name="Logger" doc:id="407fd043-0081-4b51-b133-240a22c2b6e3" message='Input Payload ::   #[write(message, "application/json") replace "\n" with "\n"]'/>
+		<oauth2-provider:validate-token config-ref="external-oauth2-provider"/>
+		<logger level="INFO" doc:name="Logger" doc:id="77d803c2-0f4d-4c90-9cb1-0a83dfeb755e" message="output payload :: #[payload]"/>
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="a34f8b35-fad5-4b2e-b718-73840fc37054" type="OAUTH2-PROVIDER:TOKEN_UNAUTHORIZED" >
+				<set-payload value="UNAUTHORIZED_TOKEN" doc:name="Set Payload" doc:id="8483f468-2ad2-4cd7-89eb-e0e819e78ca1" />
+			</on-error-continue>
+		</error-handler>
+	</flow>
+	    	
+  	<oauth2-provider:config name="external-oauth2-provider" 
+    		resourceOwnerSecurityProvider="resourceOwnerSecurityProvider" 
+    		clientSecurityProvider="clientSecurityProvider" 
+		supportedGrantTypes="${oauth.supportedgranttypes.all}" 
+		listenerConfig="HTTP_Listener_config" 
+		clientStore="clientObjectStore" 
+		scopes="${oauth.scopes.all}" 
+		defaultScopes="${oauth.scopes.default}" 
+		tokenGeneratorStrategy="tokenGeneratorOpenIdStrategy" 
+		providerName="oauth2_provider">
+    		<oauth2-provider:token-config path="${oauth.token.path}" tokenTtl="${oauth.token.ttl}" tokenStore="tokenObjectStore">
+                <oauth2-provider:refresh-token-strategy>
+                    <oauth2-provider:single-refresh-token objectStore="refreshTokenObjectStore" />
+                </oauth2-provider:refresh-token-strategy>
+            </oauth2-provider:token-config>
+    		<oauth2-provider:authorization-config authorizationCodeStore="authorizationCodeObjectStore"/>
+    	</oauth2-provider:config> 
+   	
+</mule>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:spring="http://www.mulesoft.org/schema/mule/spring"
+	  xmlns:agw-client-store="http://www.mulesoft.org/schema/mule/agw-client-store"
+	  
+      xmlns:os="http://www.mulesoft.org/schema/mule/os" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd 
+        http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+        http://www.mulesoft.org/schema/mule/spring http://www.mulesoft.org/schema/mule/spring/current/mule-spring.xsd
+        http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+        http://www.mulesoft.org/schema/mule/agw-client-store http://www.mulesoft.org/schema/mule/agw-client-store/current/mule-agw-client-store.xsd">
+
+    <spring:config name="springConfig" files="common-config-beans.xml"/>
+     
+    <os:config name="agwConfig" doc:name="ObjectStore Config" doc:id="ce0928fd-845c-4738-90c1-e2800701e4f5">
+		<agw-client-store:connection doc:name="agw-client-store:connection" />
+    </os:config>
+
+	
+	
+    <os:object-store name="clientObjectStore" persistent="true" config-ref="agwConfig"/>
+
+    <os:object-store name="authorizationCodeObjectStore"
+                     entryTtl="600"
+                     entryTtlUnit="SECONDS"
+                     persistent="true"/>
+    <os:object-store name="tokenObjectStore"
+                     entryTtl="86400"
+                     entryTtlUnit="SECONDS"
+                     persistent="true"/>
+    <os:object-store name="refreshTokenObjectStore" persistent="true"/>
+
+    <spring:security-manager>
+        <spring:delegate-security-provider name="clientSecurityProvider" delegate-ref="clientAuthenticationManager"/>
+    </spring:security-manager>
+    
+    	<spring:security-manager doc:name="Spring Security manager" doc:id="c8919b4b-6f60-4d21-a02c-ef634454b113" >
+		<spring:delegate-security-provider name="resourceOwnerSecurityProvider" delegate-ref="resourceOwnerAuthenticationManager" />
+	</spring:security-manager>
+	
+	<global-property doc:name="Global Property" doc:id="11e294e8-bbcc-4f65-9b5c-7729a3e563d8" name="env" value="dev" />
+	
+	<configuration-properties doc:name="Configuration properties" doc:id="dfcbba77-1367-43a7-9e79-440fb3404508" file="properties/${env}-properties.yaml" />
+
+</mule>

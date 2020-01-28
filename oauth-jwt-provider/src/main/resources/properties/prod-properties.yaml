@@ -1,0 +1,32 @@
+#This file contains properties for prod environment
+
+http:
+  host: "0.0.0.0"
+  public:
+    port: "8081"
+  private:
+    port: "8082"
+
+uri:
+  path: "/validate" 
+    
+https:
+  host: "0.0.0.0"
+  public:
+    port: "8091"
+  private:
+    port: "8092" 
+
+oauth:
+  token:
+    ttl: "3600"
+    path: "/access-token"
+  supportedgranttypes:
+    all: "AUTHORIZATION_CODE,IMPLICIT,RESOURCE_OWNER_PASSWORD_CREDENTIALS,CLIENT_CREDENTIALS"
+  scopes: 
+    all: "READ, WRITE"
+    default: "READ"
+    
+  
+    
+    

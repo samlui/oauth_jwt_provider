@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:ss="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+       http://www.springframework.org/schema/context 
+       http://www.springframework.org/schema/context/spring-context-4.2.xsd
+       http://www.springframework.org/schema/security 
+       http://www.springframework.org/schema/security/spring-security-4.2.xsd">
+
+		<context:annotation-config />
+		
+		<!-- <context:component-scan base-package="com.mule.util" > 
+		
+		<bean id="muleContextOnStart" class="com.mule.util.MuleContextOnStart" scope="prototype" /> -->
+      
+		<bean name="tokenGeneratorOpenIdStrategy" class="com.mule.custom.security.token.strategy.TokenGeneratorOpenIdStrategy" />
+			
+		<bean name="customAuthenticationProvider" class="com.mule.custom.security.provider.CustomAuthenticationProvider"/> 
+  		
+  		<ss:authentication-manager id="resourceOwnerAuthenticationManager">
+ 			<ss:authentication-provider ref="customAuthenticationProvider"/>
+        </ss:authentication-manager>
+
+        <!-- <ss:authentication-manager id="resourceOwnerAuthenticationManager">
+            <ss:authentication-provider>
+                <ss:user-service id="resourceOwnerUserService">
+                    <ss:user name="rousr"
+                             password="ropwd+%"
+                             authorities="RESOURCE_OWNER" />
+                </ss:user-service>
+            </ss:authentication-provider>
+        </ss:authentication-manager>
+ -->
+        <ss:authentication-manager id="clientAuthenticationManager">
+            <ss:authentication-provider>
+                <ss:user-service id="clientUserService">
+                    <ss:user name="clusr"
+                             password="clpwd+%"
+                             authorities="CLIENT" />
+                </ss:user-service>
+            </ss:authentication-provider>
+        </ss:authentication-manager>
+</beans>

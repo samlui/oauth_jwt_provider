@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="authenticateFlow" doc:id="f5f512c4-4a16-437d-a639-b478e0f105b1" >
+		<logger level="INFO" doc:name="Logger" doc:id="c0ecadc4-2b6b-4734-aa9a-7163976b8001" message="Input : #[payload]"/>
+		<choice doc:name="Choice" doc:id="f8390490-3ba0-4974-886d-56fc94aaae06" >
+			<when expression="#[payload.user == payload.pass]">
+				<ee:transform doc:name="Transform Message" doc:id="d5157171-6e4f-461d-ac09-d322a1e4bdca">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+{
+	authenticated: true,
+	custom_attributes: {
+		id: "id1",
+		ssd: "123-23-2234",
+		aud: "www.mulesoft.com",
+		scp1: "email",
+		scp2: "openid"
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Transform Message" doc:id="3c00359e-8a8a-4cd0-90ce-5f15ad8d7417" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	authenticated: false
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="Logger" doc:id="16f0d748-8581-4895-92b9-d290e136c83f" message="Output : #[payload]"/>
+	</flow>
+</mule>
